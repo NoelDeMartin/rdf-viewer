@@ -11,8 +11,9 @@ export default defineConfig({
     vue(),
     tailwindcss(),
     components({
-        dts: 'src/types/components.d.ts',
-        resolvers: [IconsResolver({ prefix: 'i' })],
+      dts: 'src/types/components.d.ts',
+      dirs: ['src/components'],
+      resolvers: [IconsResolver({ prefix: 'i' })],
     }),
     icons(),
   ],
