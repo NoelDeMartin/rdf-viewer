@@ -1,26 +1,24 @@
-overrides:
-  'vue': 'beta'
-  '@vue/compiler-core': 'beta'
-  '@vue/compiler-dom': 'beta'
-  '@vue/compiler-sfc': 'beta'
-  '@vue/compiler-ssr': 'beta'
-  '@vue/compiler-vapor': 'beta'
-  '@vue/reactivity': 'beta'
-  '@vue/runtime-core': 'beta'
-  '@vue/runtime-dom': 'beta'
-  '@vue/runtime-vapor': 'beta'
-  '@vue/server-renderer': 'beta'
-  '@vue/shared': 'beta'
-  '@vue/compat': 'beta'
-  vite: 'catalog:'
-
-peerDependencyRules:
-  allowAny:
-    - 'vue'
-    - vite
-  allowedVersions:
-    vite: '*'
-
+allowBuilds:
+    core-js: true
+    vue-demi: true
 catalog:
-  vite: npm:@voidzero-dev/vite-plus-core@latest
-  vite-plus: latest
+    '@noeldemartin/solid-utils': next
+    '@noeldemartin/utils': next
+    'soukai-bis': next
+    vite: npm:@voidzero-dev/vite-plus-core@latest
+    vite-plus: latest
+overrides:
+    '@noeldemartin/solid-utils': 'catalog:'
+    '@noeldemartin/utils': 'catalog:'
+    soukai-bis: 'catalog:'
+    vite: 'catalog:'
+peerDependencyRules:
+    allowAny:
+        - vite
+    allowedVersions:
+        vite: '*'
+minimumReleaseAgeExclude:
+    - '@aerogel/*'
+    - '@noeldemartin/*'
+    - playwright-solid
+    - soukai-bis
