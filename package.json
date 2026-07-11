@@ -10,12 +10,17 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "@noeldemartin/solid-utils": "next",
+    "@noeldemartin/utils": "next",
+    "d3-force": "^3.0.0",
     "tailwindcss": "^4.3.1",
+    "v-network-graph": "^0.9.22",
     "vue": "^3.5.38"
   },
   "devDependencies": {
     "@iconify/json": "2.2.487",
     "@noeldemartin/scripts": "next",
+    "@rdfjs/types": "^2.0.1",
     "@tailwindcss/vite": "^4.3.1",
     "@tsconfig/node24": "^24.0.4",
     "@types/node": "^24.13.2",
