@@ -34,7 +34,7 @@ importers:
         version: 0.1.2-next.4fe8be280813bde2f544d9a789a7302a9a7e54fb(@aerogel/core@0.1.2-next.113f368d1ae5dac9a48e3175436721aa235bc0f2(@tailwindcss/forms@0.5.11(tailwindcss@4.3.2))(@tailwindcss/typography@0.5.20(tailwindcss@4.3.2))(tailwindcss@4.3.2)(typescript@6.0.3)(vue@3.5.39(typescript@6.0.3))(web-streams-polyfill@3.3.3)(zod@4.4.3))(@aerogel/vite@0.1.2-next.aed0b387ace45495f3226a07ddc3545b91bf952d(@babel/parser@7.29.7)(@voidzero-dev/vite-plus-core@0.2.4(@types/node@24.13.3)(jiti@2.7.0)(terser@5.49.0)(typescript@6.0.3)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3))(workbox-window@7.4.1))(encoding@0.1.13)(soukai-bis@0.0.0-next.164223677238fcafffd4bebe73d0d6909599211c(web-streams-polyfill@3.3.3)(zod@4.4.3))(web-streams-polyfill@3.3.3)
       '@noeldemartin/solid-utils':
         specifier: next
-        version: 0.6.1-next.c48fb7c2d26eb001e7501c6ab198d96c58f99a4e(web-streams-polyfill@3.3.3)
+        version: 0.6.1-next.4f0c2095ba7cf3e9d29d7a484d80e4b089b2db6a(web-streams-polyfill@3.3.3)
       '@noeldemartin/utils':
         specifier: next
         version: 0.7.3-next.a0ef3c875be6f86a88e67b4c3c2f2d770d053c19
@@ -1445,8 +1445,8 @@ packages:
     resolution: {integrity: sha512-uwN63R+u/ef5UxUHmNobTCvbTjg1aOvj3t9w/DsKkrJlNilmAwbFxWf/XuK5qmtJVlQV7MyOtLy2XLbwYVRh1A==}
     hasBin: true
 
-  '@noeldemartin/solid-utils@0.6.1-next.c48fb7c2d26eb001e7501c6ab198d96c58f99a4e':
-    resolution: {integrity: sha512-2xFOEJ9IK+Mu7wIuzMkFCEDxfEt4q7AcLJaHNjv133Pcd8WUs+Odbt+YmXzhKCif3QAe3XST8q+WScnwsOJ/HQ==}
+  '@noeldemartin/solid-utils@0.6.1-next.4f0c2095ba7cf3e9d29d7a484d80e4b089b2db6a':
+    resolution: {integrity: sha512-ufC0koV6YlJLYKTpfHE561tRf1rUBuES2N4XUEWCCez6Gkbzw+C6bjKNoV3FkyTWeYMZnDXOp3h8dSZCOVcYXw==}
 
   '@noeldemartin/utils@0.7.3-next.a0ef3c875be6f86a88e67b4c3c2f2d770d053c19':
     resolution: {integrity: sha512-eHRTm1W0KdCR/HgbMPuThZYM5wWQOQecHMWSkyn0OU/7UTylcpRZHXMYjdvcwMulQ8MM3woNFCSpqh/cdieNxw==}
@@ -5478,7 +5478,7 @@ snapshots:
 
   '@aerogel/playwright@0.1.2-next.eeaca492b49ab28ab0fe92f818359b69fd965cee(@playwright/test@1.61.1)(web-streams-polyfill@3.3.3)':
     dependencies:
-      '@noeldemartin/solid-utils': 0.6.1-next.c48fb7c2d26eb001e7501c6ab198d96c58f99a4e(web-streams-polyfill@3.3.3)
+      '@noeldemartin/solid-utils': 0.6.1-next.4f0c2095ba7cf3e9d29d7a484d80e4b089b2db6a(web-streams-polyfill@3.3.3)
       '@noeldemartin/utils': 0.7.3-next.a0ef3c875be6f86a88e67b4c3c2f2d770d053c19
       '@playwright/test': 1.61.1
       playwright-solid: 0.0.0-next.4f571c3043b2158e53771282fcf8e53fb36fd50b(web-streams-polyfill@3.3.3)
@@ -5504,7 +5504,7 @@ snapshots:
       '@aerogel/core': 0.1.2-next.113f368d1ae5dac9a48e3175436721aa235bc0f2(@tailwindcss/forms@0.5.11(tailwindcss@4.3.2))(@tailwindcss/typography@0.5.20(tailwindcss@4.3.2))(tailwindcss@4.3.2)(typescript@6.0.3)(vue@3.5.39(typescript@6.0.3))(web-streams-polyfill@3.3.3)(zod@4.4.3)
       '@aerogel/vite': 0.1.2-next.aed0b387ace45495f3226a07ddc3545b91bf952d(@babel/parser@7.29.7)(@voidzero-dev/vite-plus-core@0.2.4(@types/node@24.13.3)(jiti@2.7.0)(terser@5.49.0)(typescript@6.0.3)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3))(workbox-window@7.4.1)
       '@inrupt/solid-client-authn-browser': 3.1.1
-      '@noeldemartin/solid-utils': 0.6.1-next.c48fb7c2d26eb001e7501c6ab198d96c58f99a4e(web-streams-polyfill@3.3.3)
+      '@noeldemartin/solid-utils': 0.6.1-next.4f0c2095ba7cf3e9d29d7a484d80e4b089b2db6a(web-streams-polyfill@3.3.3)
       '@noeldemartin/utils': 0.7.3-next.a0ef3c875be6f86a88e67b4c3c2f2d770d053c19
       solid-auth-client: 2.4.1(encoding@0.1.13)
       soukai-bis: 0.0.0-next.164223677238fcafffd4bebe73d0d6909599211c(web-streams-polyfill@3.3.3)(zod@4.4.3)
@@ -8158,7 +8158,7 @@ snapshots:
 
   '@noeldemartin/scripts@0.4.0-next.c4947cf24d83e9a211c2705b97f764039d7863ab': {}
 
-  '@noeldemartin/solid-utils@0.6.1-next.c48fb7c2d26eb001e7501c6ab198d96c58f99a4e(web-streams-polyfill@3.3.3)':
+  '@noeldemartin/solid-utils@0.6.1-next.4f0c2095ba7cf3e9d29d7a484d80e4b089b2db6a(web-streams-polyfill@3.3.3)':
     dependencies:
       '@noeldemartin/utils': 0.7.3-next.a0ef3c875be6f86a88e67b4c3c2f2d770d053c19
       '@rdfjs/types': 2.0.1
@@ -11085,7 +11085,7 @@ snapshots:
   playwright-solid@0.0.0-next.4f571c3043b2158e53771282fcf8e53fb36fd50b(web-streams-polyfill@3.3.3):
     dependencies:
       '@inrupt/solid-client-authn-core': 3.1.1
-      '@noeldemartin/solid-utils': 0.6.1-next.c48fb7c2d26eb001e7501c6ab198d96c58f99a4e(web-streams-polyfill@3.3.3)
+      '@noeldemartin/solid-utils': 0.6.1-next.4f0c2095ba7cf3e9d29d7a484d80e4b089b2db6a(web-streams-polyfill@3.3.3)
       '@noeldemartin/utils': 0.7.3-next.a0ef3c875be6f86a88e67b4c3c2f2d770d053c19
       '@playwright/test': 1.61.1
       node-fetch: 3.3.2
@@ -11665,7 +11665,7 @@ snapshots:
 
   soukai-bis@0.0.0-next.164223677238fcafffd4bebe73d0d6909599211c(web-streams-polyfill@3.3.3)(zod@4.4.3):
     dependencies:
-      '@noeldemartin/solid-utils': 0.6.1-next.c48fb7c2d26eb001e7501c6ab198d96c58f99a4e(web-streams-polyfill@3.3.3)
+      '@noeldemartin/solid-utils': 0.6.1-next.4f0c2095ba7cf3e9d29d7a484d80e4b089b2db6a(web-streams-polyfill@3.3.3)
       '@noeldemartin/utils': 0.7.3-next.a0ef3c875be6f86a88e67b4c3c2f2d770d053c19
       idb: 8.0.3
       zod: 4.4.3
