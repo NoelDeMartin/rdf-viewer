@@ -2,16 +2,27 @@
     <Page class="mx-0 max-w-none! justify-center">
         <Select v-model="resource" :options="resources" :render-option="renderResourceLabel" />
 
-        <pre v-if="resource">{{ JSON.stringify(resource, null, 2) }}</pre>
+        <template v-if="resource">
+            <JsonLDTable :jsonld="resource.data" class="mt-8" />
+
+            <template v-if="resource.metadata">
+                <h2 class="mt-8 text-lg font-bold">Metadata</h2>
+                <JsonLDTable :jsonld="resource.metadata" class="mt-4" />
+            </template>
+
+            <template v-if="resource.operations">
+                <h2 class="mt-8 text-lg font-bold">Operations ({{ resource.operations.length }})</h2>
+                <JsonLDTable v-for="operation in resource.operations" :jsonld="operation" class="mt-4" />
+            </template>
+        </template>
     </Page>
 </template>
 
 <script setup lang="ts">
 import { computedAsync } from '@aerogel/core';
 import { expandIRI, formatJsonLD, quadsToJsonLD, SolidStore, turtleToQuads } from '@noeldemartin/solid-utils';
-import type { JsonLD } from '@noeldemartin/solid-utils';
 import { arrayFrom, arrayUnique, objectFromEntries, required } from '@noeldemartin/utils';
-import { ref, toRaw, watch } from 'vue';
+import { ref, watch } from 'vue';
 
 import type Session from '@/models/Session';
 
@@ -21,7 +32,7 @@ const store = computedAsync(async () => {
 
     return quads && new SolidStore(quads);
 });
-const resource = ref<JsonLD | undefined>();
+const resource = ref<NonNullable<typeof resources.value>[number] | undefined>();
 const resources = computedAsync(async () => {
     const computedStore = store.value;
 
@@ -49,7 +60,7 @@ const resources = computedAsync(async () => {
                 !computedStore.statement(subject, 'rdf:type', 'crdt:UnSetPropertyOperation'),
         )
         .map((subject) => {
-            const resource = required(resourcesMap[subject]);
+            const data = required(resourcesMap[subject]);
             const metadata = allResources.find(
                 (resource) =>
                     resource['@type'] === expandIRI('crdt:Metadata') &&
@@ -62,21 +73,13 @@ const resources = computedAsync(async () => {
                     Object(resource[expandIRI('crdt:resource')])['@id'] === subject,
             );
 
-            if (metadata) {
-                resource['metadata'] = metadata;
-            }
-
-            if (operations.length > 0) {
-                resource['operations'] = operations;
-            }
-
-            return resource;
+            return { data, metadata, operations };
         });
 });
 
-function renderResourceLabel(resource: JsonLD) {
-    const id = (Object(resource)['@id'] ?? '').replace('solid://anonymous', '');
-    const types = arrayFrom(Object(resource)['@type'])?.join(', ') ?? '';
+function renderResourceLabel(resource: NonNullable<typeof resources.value>[number]) {
+    const id = (Object(resource.data)['@id'] ?? '').replace('solid://anonymous', '');
+    const types = arrayFrom(Object(resource.data)['@type'])?.join(', ') ?? '';
 
     return `${id} (${types})`;
 }
@@ -86,6 +89,6 @@ watch(resources, () => {
         return;
     }
 
-    resource.value = resources.value.find((resource) => resource['@id']?.endsWith('#it')) ?? resources.value[0];
+    resource.value = resources.value.find((resource) => resource.data['@id']?.endsWith('#it')) ?? resources.value[0];
 });
 </script>
