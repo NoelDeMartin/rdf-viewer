@@ -1,18 +1,24 @@
 <template>
-    <Page class="mx-0 max-w-none! justify-center">
+    <Page class="max-w-[1200px]! justify-center">
         <Select v-model="resource" :options="resources" :render-option="renderResourceLabel" />
 
         <template v-if="resource">
             <JsonLDTable :jsonld="resource.data" class="mt-8" />
 
+            <h2 v-if="resource.metadata || resource.operations" class="mt-8 text-3xl font-bold">History</h2>
+
             <template v-if="resource.metadata">
-                <h2 class="mt-8 text-lg font-bold">Metadata</h2>
-                <JsonLDTable :jsonld="resource.metadata" class="mt-4" />
+                <p v-if="resource.metadata.createdAt" class="mt-2">
+                    Created at: {{ formatDate(resource.metadata.createdAt) }}
+                </p>
+                <p v-if="resource.metadata.updatedAt">Updated at: {{ formatDate(resource.metadata.updatedAt) }}</p>
             </template>
 
             <template v-if="resource.operations">
-                <h2 class="mt-8 text-lg font-bold">Operations ({{ resource.operations.length }})</h2>
-                <JsonLDTable v-for="operation in resource.operations" :jsonld="operation" class="mt-4" />
+                <div v-for="{ date, operations } in resource.operations" :key="date.getTime()">
+                    <h3 class="mt-6 text-lg font-bold">{{ formatDate(date) }}</h3>
+                    <OperationsTable :operations="operations" class="mt-4" />
+                </div>
             </template>
         </template>
     </Page>
@@ -21,10 +27,12 @@
 <script setup lang="ts">
 import { computedAsync } from '@aerogel/core';
 import { expandIRI, formatJsonLD, quadsToJsonLD, SolidStore, turtleToQuads } from '@noeldemartin/solid-utils';
-import { arrayFrom, arrayUnique, objectFromEntries, required } from '@noeldemartin/utils';
+import { arrayFrom, arraySorted, arrayUnique, isTruthy, objectFromEntries, required } from '@noeldemartin/utils';
+import { Metadata, SetPropertyOperation, UnsetPropertyOperation } from 'soukai-bis';
 import { ref, watch } from 'vue';
 
 import type Session from '@/models/Session';
+import { formatDate } from '@/utils/formatting';
 
 const { session } = defineProps<{ session: Session }>();
 const store = computedAsync(async () => {
@@ -52,29 +60,64 @@ const resources = computedAsync(async () => {
     );
     const resourcesMap = objectFromEntries(allResources.map((resource) => [required(resource['@id']), resource]));
 
-    return subjects
-        .filter(
-            (subject) =>
-                !computedStore.statement(subject, 'rdf:type', 'crdt:Metadata') &&
-                !computedStore.statement(subject, 'rdf:type', 'crdt:SetPropertyOperation') &&
-                !computedStore.statement(subject, 'rdf:type', 'crdt:UnSetPropertyOperation'),
-        )
-        .map((subject) => {
-            const data = required(resourcesMap[subject]);
-            const metadata = allResources.find(
-                (resource) =>
-                    resource['@type'] === expandIRI('crdt:Metadata') &&
-                    Object(resource[expandIRI('crdt:resource')])['@id'] === subject,
-            );
-            const operations = allResources.filter(
-                (resource) =>
-                    (resource['@type'] === expandIRI('crdt:SetPropertyOperation') ||
-                        resource['@type'] === expandIRI('crdt:UnSetPropertyOperation')) &&
-                    Object(resource[expandIRI('crdt:resource')])['@id'] === subject,
-            );
+    return await Promise.all(
+        subjects
+            .filter(
+                (subject) =>
+                    !computedStore.statement(subject, 'rdf:type', 'crdt:Metadata') &&
+                    !computedStore.statement(subject, 'rdf:type', 'crdt:SetPropertyOperation') &&
+                    !computedStore.statement(subject, 'rdf:type', 'crdt:UnSetPropertyOperation'),
+            )
+            .map(async (subject) => {
+                const data = required(resourcesMap[subject]);
+                const metadataJsonLD = allResources.find(
+                    (resource) =>
+                        resource['@type'] === expandIRI('crdt:Metadata') &&
+                        Object(resource[expandIRI('crdt:resource')])['@id'] === subject,
+                );
+                const operationsJsonLD = allResources.filter(
+                    (resource) =>
+                        (resource['@type'] === expandIRI('crdt:SetPropertyOperation') ||
+                            resource['@type'] === expandIRI('crdt:UnSetPropertyOperation')) &&
+                        Object(resource[expandIRI('crdt:resource')])['@id'] === subject,
+                );
 
-            return { data, metadata, operations };
-        });
+                const metadata = metadataJsonLD && (await Metadata.createFromJsonLD(metadataJsonLD));
+                const operations = (
+                    await Promise.all(
+                        operationsJsonLD.map((operation) => {
+                            switch (operation['@type']) {
+                                case expandIRI('crdt:SetPropertyOperation'):
+                                    return SetPropertyOperation.createFromJsonLD(operation);
+                                case expandIRI('crdt:UnSetPropertyOperation'):
+                                    return UnsetPropertyOperation.createFromJsonLD(operation);
+                            }
+                        }),
+                    )
+                ).filter(isTruthy);
+
+                const operationsByDate = {} as Record<number, Array<SetPropertyOperation | UnsetPropertyOperation>>;
+
+                for (const operation of operations) {
+                    const date = operation.date.getTime();
+
+                    operationsByDate[date] ??= [];
+                    operationsByDate[date].push(operation);
+                }
+
+                return {
+                    data,
+                    metadata,
+                    operations: arraySorted(
+                        Object.entries(operationsByDate).map(([date, operations]) => ({
+                            date: new Date(Number(date)),
+                            operations,
+                        })),
+                        'date',
+                    ),
+                };
+            }),
+    );
 });
 
 function renderResourceLabel(resource: NonNullable<typeof resources.value>[number]) {
